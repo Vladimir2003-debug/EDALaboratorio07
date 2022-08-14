@@ -475,7 +475,28 @@ public class Item {
 			return null;
 	}
 ```
+#### Test
 
+Para el test se Uso la clase Users en el repositorio la respuesta a la ejecucion de test seria
+```
+
+[ 
+( key: fiorella, value: 54 , )
+( key: margareth, value: 14 , )
+( key: alfred, value: 34 , key: esteban, value: 33 , )
+( key: olga, value: 99 , )
+]
+14 (Estos valores corresponden al valor de la clave "margareth")
+14  (Este valor es lo que se elimino)
+key: fiorella, value: 54
+key: margareth, value: 14
+key: alfred, value: 34
+key: esteban, value: 33
+key: olga, value: 99
+
+14 (Estos valores corresponden al valor de la clave "margareth")
+14  (Este valor es lo que se elimino)
+```
 ## III CONCLUSIONES
 La velocidad para la obtencion de los datos supone un O(1) en todos los casos, sin embargo hay que
  tener pesar de esto la valocidad puede ser demasiado alta si es que existen multiples claves con
