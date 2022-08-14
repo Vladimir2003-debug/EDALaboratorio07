@@ -9,7 +9,9 @@ public class HashChaining implements HashTable {
 
 	public HashChaining() {
 		table = new LinkedList[DEFAULT_LENGTH];
-		size = 0;
+	}
+	public HashChaining(int lenght) {
+		table = new LinkedList[lenght];
 	}
 
 	public int size() {
@@ -17,7 +19,7 @@ public class HashChaining implements HashTable {
 	}
 
 	public boolean isEmpty() {
-		return table[0] == null;
+		return size == 0;
 	}
 
 	public boolean containsKey(Object key) {
@@ -32,9 +34,10 @@ public class HashChaining implements HashTable {
 		LinkedList tmp = null;
 		for (int i = 0; i < table.length; i++) {
 			tmp = table[i];
-			for(Item item: table[i]) {
-				if(item.getValue().equals(value)) 
-					return true;
+			if(tmp != null)
+				for(Item item: table[i]) {
+					if(item.getValue().equals(value)) 
+						return true;
 			}
 		}
 		return false;
@@ -76,6 +79,7 @@ public class HashChaining implements HashTable {
 				table[code].remove(i);
 				if(table[code].size()==0) 
 					table[code] = null;
+				size--;
 				break;
 			}
 		}			
