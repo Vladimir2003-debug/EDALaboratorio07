@@ -1,18 +1,6 @@
 package Propuestos;
 
 public class HashLinearProbing implements HashTable {
-	class Item {
-		private Object value;
-		private Comparable key;
-
-		public Item() {
-		}
-
-		public Item(Object value, Comparable key) {
-			this.value = value;
-			this.key = key;
-		}
-	}
 
 	private Item[] table;
 	private int DEFAULT_LENGTH = 10;
@@ -35,7 +23,7 @@ public class HashLinearProbing implements HashTable {
 		int i = codeGetHash(key);
 
 		while (i < table.length || table[i] != null) {
-			if (table[i].key.equals(key))
+			if (table[i].getKey().equals(key))
 				return true;
 			i++;
 		}
@@ -45,7 +33,7 @@ public class HashLinearProbing implements HashTable {
 	public boolean containsValue(Object value) {
 		int i = 0;
 		while (table[i] != null) {
-			if (table[i].value.equals(value))
+			if (table[i].getValue().equals(value))
 				return true;
 			i++;
 		}
@@ -54,37 +42,51 @@ public class HashLinearProbing implements HashTable {
 
 	public Integer get(String key) {
 		Integer value = getIndex(key);
-		return (value != null) ? (Integer)table[value].value: null;
+		return (value != null) ? (Integer)table[value].getValue(): null;
 	}
 
 	public Integer put(String key, Integer value) {
 		int i = codeGetHash(key);
 
+		if(size > (table.length*80)/100)
+			reSize();
 		while (i < table.length) {
-			if (table[i] == null)
-				table[i] = new Item(key, value);
-			else
+			if (table[i] == null){
+				break;
+			}else
 				i++;
 		}
+		if(i == table.length)
+			reSize();
+		
+		table[i] = new Item(key, value);
+
+		size++;
 		return value;
+	}
+
+	private void reSize() {
+		Item[] tmp = new Item[this.table.length*2];
+		for (int i = 0; i < table.length; i++)
+			tmp[i] = this.table[i];
+		this.table = tmp; 
 	}
 
 	public Integer remove(Object key) {
 		Integer i = getIndex(key);
+
 		if(i != null) {		
-			Integer value = (Integer)table[i].value;
+			Integer value = (Integer)table[i].getValue();
 			table[i] = null;
 			return value;
-		}
-		return null;
-
+		} else
+			return null;
 	}
 
 	private Integer getIndex(Object key) {
 		Integer i = codeGetHash(key);
-
 		while (i < table.length || table[i] != null) {
-			if (table[i].key.equals(key))
+			if (table[i].getKey().equals(key))
 				return i;
 			else
 				i++;
@@ -109,8 +111,11 @@ public class HashLinearProbing implements HashTable {
 
 	public String toString() {
 		String text = "";
-		for (int i = 0; i < table.length; i++) {
-			text += "key: " + table[i].key + " value: " +table[i].value + "\n";
+		for (int i = 0; i < table.length ; i++) {
+			if(table[i] == null)
+				text += "null\n";
+			else
+				text += table[i] + "\n";
 		}
 		return text;
 	}
