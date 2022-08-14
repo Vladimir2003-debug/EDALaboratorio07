@@ -12,7 +12,16 @@ public class User {
 		name = pName;
 		email = pEmail;
 	}
-		
+	public int getId() {
+		return id;
+	}
+	public String getName() {
+		return name;
+	}
+	public String getEmail() {
+		return email;
+	}
+
 	@Override
 	public int hashCode() {
 	    final int prime = 31;
