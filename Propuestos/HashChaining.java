@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class HashChaining implements HashTable {
 	private final int DEFAULT_LENGTH = 10;
-	private LinkedList<Integer>[] table;
+	private LinkedList<Item>[] table;
 	private int size;
 
 	public HashChaining() {
@@ -21,72 +21,65 @@ public class HashChaining implements HashTable {
 	}
 
 	public boolean containsKey(Object key) {
-		if (key == null)
-			throw new NullPointerException();
-		int code = key.hashCode();
-		if(code > 0)
-			code = (-1) * code;
-		code = code % table.length;
-		if (table[key.hashCode()] != null)
+		int index = codeGetHash(key);
+
+		if (table[index] != null)
 			return true;
 		return false;
 	}
 
 	public boolean containsValue(Object value) {
-		LinkedList<Integer> tmp = null;
+		LinkedList tmp = null;
 		for (int i = 0; i < table.length; i++) {
 			tmp = table[i];
-			if(tmp.contains(value))
-				return true;
+			for(Item item: table[i]) {
+				if(item.getValue().equals(value)) 
+					return true;
+			}
 		}
 		return false;
 	}
 
 	public Integer get(String key) {
-		if (key == null)
-			throw new NullPointerException();
 
-		int code = key.hashCode();
+		int code = codeGetHash(key); 
 
-		if(code < 0)
-			code = code*(-1);
-		code = code % table.length;
-
-		if (table[code] == null)
-			return null;
-		Integer value = (Integer) table[code].get(0);
-		return value;
+		for(Item item : table[code]) {
+			if(item.getKey().equals(key))
+				return (Integer)item.getValue();
+		}
+		return null;
 	}
 
 	public Integer put(String key, Integer value) {
-		if (key == null || value == null)
-			throw new NullPointerException();
-		int code = key.hashCode();
-		
-		if(code < 0) 
-			code = code*(-1); 
-		
-		code = code % table.length;
+		int code = codeGetHash(key);
+
 		if (table[code] == null) {
-			table[code] = new LinkedList<Integer>();
+			table[code] = new LinkedList<Item>();
 		}
-		table[code].add(value);
-		size ++;
+		table[code].add(new Item(key,value));
+		size++;
 		return value;
 	}
 
 	public Integer remove(Object key) {
-		if(key == null)
-			throw new NullPointerException();
-		int code = key.hashCode();
+		int code = codeGetHash(key);
 
-		if(code < 0)
-			code = -code;
-		code= code % table.length;
+		if(table[code] == null)
+			return null;
+		int size = table[code].size();
 
-		Integer value = table[code].get(0);
-		table[code] = null;
-		return value;
+		Object value = null;
+		for (int i = 0; i < size ; i++) {
+			if(table[code].get(i).getKey().equals(key)){
+				value = table[code].get(i).getValue();
+				table[code].remove(i);
+				if(table[code].size()==0) 
+					table[code] = null;
+				break;
+			}
+		}			
+		return (Integer)value;
 	}
 
 	public void clear() {
@@ -97,20 +90,32 @@ public class HashChaining implements HashTable {
 		String text = "[\n";
 		int length = table.length;
 		for (int i = 0; i < length; i++) {
-			if (table[i] == null) continue;
+			if (table[i] == null)
+				continue;
 			text += printList(table[i]) + "\n";
 		}
 		text += "]";
 		return text;
 	}
 
-	public String printList(LinkedList<Integer> list) {
+	public String printList(LinkedList<Item> list) {
 		String text = "( ";
 		for (int i = 0; i < list.size(); i++) {
 			text += list.get(i) + " , ";
 		}
 		text += ")";
 		return text;
+	}
+
+	private int codeGetHash(Object value) {
+		if (value == null)
+			throw new NullPointerException();
+		int code = value.hashCode();
+
+		if (code < 0)
+			code = -code;
+		code = code % table.length;
+		return code;
 	}
 
 }
