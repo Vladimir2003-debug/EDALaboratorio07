@@ -2,7 +2,7 @@ package Propuestos;
 public class Test {
     public static void main(String[] args) {
         
-        HashChaining hash = new HashChaining();
+        HashLinearProbing hash = new HashLinearProbing();
         hash.put("a", 11);
         hash.put("b", 145);
         hash.put("c", 12);
@@ -21,8 +21,10 @@ public class Test {
         System.out.println(hash);
         System.out.println(hash.size());
         System.out.println(hash.get("i"));
-        hash.remove("i");
         System.out.println(hash);
+        System.out.println(hash.size());
+        System.out.println(hash.containsKey("i"));
+        System.out.println(hash.containsValue(111434));
     }
 
 }
