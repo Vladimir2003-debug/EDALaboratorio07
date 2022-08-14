@@ -1,9 +1,10 @@
 package Propuestos;
 
 public class Item {
+    //Atributos
     private Object value;
     private Object key;
-
+    //Contructores
     public Item() {
     }
 
@@ -11,6 +12,7 @@ public class Item {
         this.key = key;
         this.value = value;
     }
+    //Getters y setters
     public Object getKey() {
         return this.key;
     }
@@ -24,7 +26,7 @@ public class Item {
     public void setValue(Object value) {
         this.value = value;
     }
-
+    //tostring
     public String toString() {
         return "key: " + this.key + ", value: " + this.value;
     }
