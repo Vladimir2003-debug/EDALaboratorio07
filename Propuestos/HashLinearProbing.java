@@ -8,7 +8,9 @@ public class HashLinearProbing implements HashTable {
 
 	public HashLinearProbing() {
 		table = new Item[DEFAULT_LENGTH];
-		size = 0;
+	}
+	public HashLinearProbing(int length) {
+		table = new Item[length];
 	}
 
 	public int size() {
@@ -22,19 +24,18 @@ public class HashLinearProbing implements HashTable {
 	public boolean containsKey(Object key) {
 		int i = codeGetHash(key);
 
-		while (i < table.length || table[i] != null) {
-			if (table[i].getKey().equals(key))
-				return true;
-			i++;
+		if(table[i] != null){
+			return true;
 		}
 		return false;
 	}
 
 	public boolean containsValue(Object value) {
 		int i = 0;
-		while (table[i] != null) {
-			if (table[i].getValue().equals(value))
-				return true;
+		while (i < table.length) {
+			if(table[i] != null)
+				if (table[i].getValue().equals(value))
+					return true;
 			i++;
 		}
 		return false;
@@ -78,6 +79,7 @@ public class HashLinearProbing implements HashTable {
 		if(i != null) {		
 			Integer value = (Integer)table[i].getValue();
 			table[i] = null;
+			size--;
 			return value;
 		} else
 			return null;
